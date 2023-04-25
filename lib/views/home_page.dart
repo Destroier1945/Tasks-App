@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todoapp/views/add_task_page.dart';
 import 'package:todoapp/views/configuration_page.dart';
 import 'package:todoapp/views/task_list_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final Function(ThemeMode) saveTheme;
+  const HomePage({Key? key, required this.saveTheme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,9 @@ class HomePage extends StatelessWidget {
             Navigator.of(context).pop();
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (BuildContext context) => ConfigurationPage(),
+                builder: (BuildContext context) => ConfigurationPage(
+                  saveTheme: (ThemeMode themeMode) => saveTheme(themeMode),
+                ),
               ),
             );
           }
@@ -44,7 +48,7 @@ class HomePage extends StatelessWidget {
             ),
           );
         },
-        label: const Text('adcionar'),
+        label: const Text('adicionar'),
         icon: const Icon(Icons.add),
       ),
     );

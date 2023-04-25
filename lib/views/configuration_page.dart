@@ -1,10 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../main.dart';
 
 class ConfigurationPage extends StatefulWidget {
-  const ConfigurationPage({super.key});
+  Future<void> Function(ThemeMode) saveTheme;
+
+  ConfigurationPage({Key? key, required this.saveTheme});
 
   @override
   State<ConfigurationPage> createState() => _ConfigurationPageState();
+}
+
+ThemeMode _selectTheme = ThemeMode.system;
+Future<void> saveTheme(ThemeMode themeMode) async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('theme_mode', themeMode.toString());
 }
 
 class _ConfigurationPageState extends State<ConfigurationPage> {
@@ -24,21 +34,36 @@ class _ConfigurationPageState extends State<ConfigurationPage> {
             ),
             SizedBox(height: 30),
             RadioListTile(
-              value: ThemeMode,
-              groupValue: ThemeMode.system,
-              onChanged: (value) {},
+              value: ThemeMode.system,
+              groupValue: _selectTheme,
+              onChanged: (value) {
+                setState(() {
+                  _selectTheme = value as ThemeMode;
+                  widget.saveTheme(_selectTheme);
+                });
+              },
               title: Text('Sistema'),
             ),
             RadioListTile(
-              value: ThemeMode,
-              groupValue: ThemeMode.light,
-              onChanged: (value) {},
+              value: ThemeMode.light,
+              groupValue: _selectTheme,
+              onChanged: (value) {
+                setState(() {
+                  _selectTheme = value as ThemeMode;
+                  widget.saveTheme(_selectTheme);
+                });
+              },
               title: Text('Claro'),
             ),
             RadioListTile(
-              value: ThemeMode,
-              groupValue: ThemeMode.dark,
-              onChanged: (value) {},
+              value: ThemeMode.dark,
+              groupValue: _selectTheme,
+              onChanged: (value) {
+                setState(() {
+                  _selectTheme = value as ThemeMode;
+                  widget.saveTheme(_selectTheme);
+                });
+              },
               title: Text('Escuro'),
             ),
             SizedBox(height: 30),
